@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSync AI</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #06B6D4;
+            --bg-base: #FDFDF9; /* Lightest mix */
+            --bg-light-green: #E8F5E9; /* Lightest green */
+            --bg-light-brown: #F5E6D3; /* Lightest brown */
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Gradient Waves */
+        .bg-animated {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, var(--bg-light-green), transparent 60%),
+                        radial-gradient(circle at 80% 20%, var(--bg-light-brown), transparent 50%);
+            z-index: -1;
+            animation: rotateBg 25s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Background Engineering/Graduation Cap Watermark */
+        .bg-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            font-size: 60vh;
+            color: var(--primary);
+            opacity: 0.06; /* Light intense / faint */
+            z-index: -1;
+            pointer-events: none;
+            filter: drop-shadow(0 0 50px var(--primary)); /* Glowing effect */
+            animation: floatCap 8s ease-in-out infinite;
+        }
+
+        @keyframes floatCap {
+            0%, 100% { transform: translate(-50%, -50%) rotate(-10deg) scale(1); }
+            50% { transform: translate(-50%, -53%) rotate(-5deg) scale(1.05); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
+                        0 0 40px rgba(79, 70, 229, 0.15);
+            position: relative;
+            z-index: 1;
+            margin: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Animated Glowing Gradient Border */
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 2px; /* Border thickness */
+            background: linear-gradient(45deg, var(--primary), var(--secondary), transparent 40%, var(--secondary), var(--primary));
+            background-size: 200% 200%;
+            animation: glowingBorder 4s linear infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        @keyframes glowingBorder {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .icon-container {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+            transform: rotate(-5deg);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .container:hover .icon-container {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 0 10px;
+            background: linear-gradient(to right, #a5b4fc, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin: 0;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            z-index: 2;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px 16px 16px 50px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            appearance: none;
+        }
+
+        /* Custom Dropdown Arrow */
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+        
+        select option {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
+            background: white;
+        }
+
+        .form-group:focus-within .input-icon {
+            color: var(--secondary);
+        }
+
+        .btn-glow {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.7);
+        }
+
+        .btn-glow:hover::after {
+            left: 100%;
+        }
+
+        .btn-glow:active {
+            transform: translateY(1px);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            animation-delay: 0.3s;
+        }
+
+        .score-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--secondary) var(--score-deg, 0deg), rgba(255,255,255,0.05) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            position: relative;
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.2);
+        }
+
+        .score-inner {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .score-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .result-section {
+            margin-bottom: 15px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.02);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .result-section:hover {
+            background: rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+
+        .result-section h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: var(--secondary);
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-section p {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animated"></div>
+    <i class="fa-solid fa-graduation-cap bg-watermark"></i>
+
+    <div class="container fade-in">
+        <div class="hero">
+            <div class="icon-container">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+            <h1>SkillSync AI</h1>
+            <p class="tagline">Bridge the Gap Between Curriculum and Industry Skills</p>
+        </div>
+
+        <form method="POST">
+            <div class="form-group">
+                <i class="fa-solid fa-briefcase input-icon"></i>
+                <select name="domain" id="domain" required>
+                    <option value="" disabled {% if domain is not defined or domain == '' %}selected{% endif %}>Select Industry / Domain</option>
+                    <option value="software" {% if domain == 'software' %}selected{% endif %}>Software Engineering</option>
+                    <option value="data" {% if domain == 'data' %}selected{% endif %}>Data Science</option>
+                    <option value="marketing" {% if domain == 'marketing' %}selected{% endif %}>Marketing</option>
+                    <option value="design" {% if domain == 'design' %}selected{% endif %}>Design</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <i class="fa-solid fa-graduation-cap input-icon"></i>
+                <select name="syllabus" id="syllabus" required>
+                    <option value="" disabled {% if syllabus is not defined or syllabus == '' %}selected{% endif %}>Select a syllabus skill</option>
+                    <option value="python" {% if syllabus == 'python' %}selected{% endif %}>Python</option>
+                    <option value="java" {% if syllabus == 'java' %}selected{% endif %}>Java</option>
+                    <option value="sql" {% if syllabus == 'sql' %}selected{% endif %}>SQL</option>
+                    <option value="machine learning" {% if syllabus == 'machine learning' %}selected{% endif %}>Machine Learning</option>
+                    <option value="data analysis" {% if syllabus == 'data analysis' %}selected{% endif %}>Data Analysis</option>
+                    <option value="project management" {% if syllabus == 'project management' %}selected{% endif %}>Project Management</option>
+                    <option value="ui/ux design" {% if syllabus == 'ui/ux design' %}selected{% endif %}>UI/UX Design</option>
+                    <option value="digital marketing" {% if syllabus == 'digital marketing' %}selected{% endif %}>Digital Marketing</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <i class="fa-solid fa-magnifying-glass-chart input-icon"></i>
+                <input type="text" name="market" id="market" placeholder="Enter market skills (comma separated)" value="{{ market if market is defined else '' }}" required>
+            </div>
+
+            <button type="submit" class="btn-glow">
+                <span>Analyze Skills</span> <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </button>
+        </form>
+
+        {% if score is defined %}
+        <div class="results fade-in">
+            <div class="score-container">
+                <div class="score-circle" style="--score-deg: {{ score * 3.6 }}deg;">
+                    <div class="score-inner">{{ score | int }}%</div>
+                </div>
+                <div class="score-label">Relevance Score</div>
+            </div>
+
+            <div class="result-section">
+                <h3><i class="fa-solid fa-circle-check" style="color: #10B981;"></i> Matched Skills</h3>
+                <p>{{ matched | join(', ') if matched else 'None' }}</p>
+            </div>
+
+            <div class="result-section">
+                <h3><i class="fa-solid fa-circle-xmark" style="color: #EF4444;"></i> Missing Skills</h3>
+                <p>{{ missing | join(', ') if missing else 'None' }}</p>
+            </div>
+
+            <div class="result-section">
+                <h3><i class="fa-solid fa-lightbulb" style="color: #F59E0B;"></i> Suggestions</h3>
+                <p>{{ suggestions | join(', ') if suggestions else 'You have all the skills needed!' }}</p>
+            </div>
+
+            {% if roadmap %}
+            <div class="result-section">
+                <h3><i class="fa-solid fa-map-location-dot" style="color: var(--primary);"></i> Recommended Roadmap</h3>
+                <p>{{ roadmap }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
